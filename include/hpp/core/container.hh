@@ -88,6 +88,22 @@ namespace hpp {
         return _e->second;
       }
 
+      /// Return the elements corresponding to each name in the vector names
+      const std::vector<mapped_type> get (const std::vector<key_type>& names) const
+      {
+        std::vector<mapped_type> results;
+        for (typename std::vector<key_type>::const_iterator it = names.begin ();
+	         it != names.end (); ++it)        {
+          const_iterator _e = map.find (*it);
+          if (_e == map.end ()) {
+            std::stringstream ss; ss << "Invalid key: " << *it;
+            throw std::invalid_argument (ss.str());
+          }
+          results.push_back (_e->second);
+        }
+        return results;
+      }
+
       /// Return the element named name
       const mapped_type& get (const key_type& name, const mapped_type& defaultValue) const
       {

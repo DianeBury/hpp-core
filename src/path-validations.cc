@@ -32,7 +32,7 @@ namespace hpp {
       return PathValidationsPtr_t (ptr);
     }
 
-    void PathValidations::addPathValidation
+    void PathValidations::add
     (const PathValidationPtr_t& pathValidation)
     {
       validations_.push_back (pathValidation);
@@ -91,6 +91,11 @@ namespace hpp {
 	     validations_.begin (); itVal != validations_.end (); ++itVal) {
 	(*itVal)->filterCollisionPairs (matrix);
       }
+    }
+
+    void PathValidations::clear ()
+    {
+      validations_.clear ();
     }
 
     PathValidations::PathValidations () : validations_ ()

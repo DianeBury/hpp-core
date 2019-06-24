@@ -153,10 +153,17 @@ namespace hpp {
       virtual void pathValidation (const PathValidationPtr_t& pathValidation);
 
       /// Get path validation method
-      PathValidationPtr_t pathValidation () const
-      {
-	return pathValidation_;
-      }
+      PathValidationPtr_t pathValidation () const;
+
+      /// Reset the PathValidations
+      void resetPathValidations ();
+
+      // Clear the PathValidations
+      void clearPathValidations ();
+
+      /// Add a path validation method
+      void addPathValidation (const PathValidationPtr_t& pathValidation);
+
       /// \}
 
 
@@ -312,7 +319,7 @@ namespace hpp {
       /// Configuration validation
       ConfigValidationsPtr_t configValidations_;
       /// Path validation
-      PathValidationPtr_t pathValidation_;
+      PathValidationsPtr_t pathValidations_;
       /// Path projector
       PathProjectorPtr_t pathProjector_;
       /// List of obstacles

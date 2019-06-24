@@ -49,7 +49,7 @@ namespace hpp {
 			     PathValidationReportPtr_t& report);
 
       /// Add a path validation object
-      virtual void addPathValidation (const PathValidationPtr_t& pathValidation);
+      virtual void add (const PathValidationPtr_t& pathValidation);
 
       /// Add an obstacle
       /// \param object obstacle added
@@ -65,6 +65,9 @@ namespace hpp {
           const CollisionObjectConstPtr_t& obstacle);
 
       virtual void filterCollisionPairs (const RelativeMotion::matrix_type& matrix);
+
+      // Clear the vector of path validations
+      void clear ();
 
       virtual ~PathValidations () {};
     protected:

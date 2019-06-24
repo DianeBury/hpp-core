@@ -61,6 +61,7 @@
 #include <hpp/core/path-validation/discretized-collision-checking.hh>
 #include <hpp/core/path-validation/discretized-joint-bound.hh>
 #include <hpp/core/path-validation-report.hh>
+#include <hpp/core/path-validations.hh>
 // #include <hpp/core/problem-target/task-target.hh>
 #include <hpp/core/problem-target/goal-configurations.hh>
 #include <hpp/core/roadmap.hh>
@@ -193,7 +194,8 @@ namespace hpp {
       distanceType_("WeighedDistance"),
       steeringMethodType_ ("Straight"),
       pathOptimizerTypes_ (), pathOptimizers_ (),
-      pathValidationType_ ("Discretized"), pathValidationTolerance_ (0.05),
+      pathValidationTypes_ (),
+      pathValidationTolerances_ (),
       configValidationTypes_ (),
       collisionObstacles_ (), distanceObstacles_ (),
       obstacleRModel_ (new Model()),
@@ -340,25 +342,60 @@ namespace hpp {
     void ProblemSolver::pathValidationType (const std::string& type,
 					    const value_type& tolerance)
     {
+      clearPathValidations ();
+      addPathValidation (type, tolerance);
+    }
+
+    void ProblemSolver::pathValidationTypes (const PathValidationTypes_t &types,
+              const PathValidationTolerances_t &tolerances)
+    {
+      pathValidationTolerances_ = tolerances;
+      pathValidationTypes_ = types;
+      initPathValidation ();
+    }
+
+    void ProblemSolver::addPathValidation (const std::string& type,
+					    const value_type& tolerance)
+    {
       if (!pathValidations.has (type)) {
 	throw std::runtime_error (std::string ("No path validation method with "
 					       "name ") + type);
       }
-      pathValidationType_ = type;
-      pathValidationTolerance_ = tolerance;
-      // If a robot is present, set path validation method
-      if (robot_ && problem_) {
-        initPathValidation();
-      }
+      pathValidationTypes_.push_back (type);
+      pathValidationTolerances_.push_back(tolerance);
+      if (!problem_) throw std::runtime_error ("The problem is not defined.");
+      // If a robot is present, set path validation methods
+      initPathValidation ();
+    }
+
+    void ProblemSolver::clearPathValidations ()
+    {
+      pathValidationTypes_.clear ();
+      pathValidationTolerances_.clear ();
+      problem_->clearPathValidations ();
     }
 
     void ProblemSolver::initPathValidation ()
     {
       if (!problem_) throw std::runtime_error ("The problem is not defined.");
-      PathValidationPtr_t pathValidation =
-        pathValidations.get (pathValidationType_)
-        (robot_, pathValidationTolerance_);
-      problem_->pathValidation (pathValidation);
+      problem_->resetPathValidations();
+      for (unsigned i=0; i<pathValidationTypes_.size(); i++)
+      {
+        PathValidationPtr_t pathValidation =
+          pathValidations.get(pathValidationTypes_.at(i))
+        (robot_, pathValidationTolerances_.at(i));
+        problem_->addPathValidation (pathValidation);
+      }
+
+      // for (ConfigValidationTypes_t::const_iterator it =
+      //     pathValidationTypes_.begin (); it != pathValidationTypes_.end ();
+      //     ++it)
+      // {
+      //   PathValidationPtr_t pathValidation =
+      //     pathValidations.get (*it)
+      //   (robot_, pathValidationTolerance_);
+      //   problem_->addPathValidation (pathValidation);
+      // }
     }
 
     void ProblemSolver::initConfigValidation ()

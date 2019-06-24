@@ -33,6 +33,7 @@
 #include <hpp/core/continuous-validation/dichotomy.hh>
 #include <hpp/core/continuous-validation/progressive.hh>
 #include <hpp/core/configuration-shooter/uniform.hh>
+#include <hpp/core/path-validations.hh>
 
 namespace hpp {
   namespace core {
@@ -93,17 +94,20 @@ namespace hpp {
       distance_       = WeighedDistance::create (robot_);
       target_         = problemTarget::GoalConfigurations::create (wkPtr_.lock());
       steeringMethod_ = steeringMethod::Straight::create (*this);
-      pathValidation_ = pathValidation::createDiscretizedCollisionChecking (robot_, 0.05);
       configurationShooter_ = configurationShooter::Uniform::create (robot_);
 
       resetConfigValidations();
+      resetPathValidations();
+
+      addPathValidation (pathValidation::createDiscretizedCollisionChecking (robot_, 0.05));
+
     }
 
     // ======================================================================
 
     Problem::Problem () :
       robot_ (), distance_ (), initConf_ (), goalConfigurations_ (), target_ (),
-      steeringMethod_ (), configValidations_ (), pathValidation_ (),
+      steeringMethod_ (), configValidations_ (), pathValidations_ (),
       collisionObstacles_ (), constraints_ (), configurationShooter_()
     {
       assert (false && "This constructor should not be used.");
@@ -151,9 +155,30 @@ namespace hpp {
 
     // ======================================================================
 
+    PathValidationPtr_t Problem::pathValidation () const
+    {
+      return HPP_DYNAMIC_PTR_CAST(PathValidation, pathValidations_);
+    }
+
+    // ======================================================================
+
+    void Problem::resetPathValidations ()
+    {
+      pathValidations_ = PathValidations::create ();
+    }
+
+    // ======================================================================
+
     void Problem::clearConfigValidations ()
     {
       configValidations_->clear ();
+    }
+
+    // ======================================================================
+
+    void Problem::clearPathValidations ()
+    {
+      pathValidations_->clear ();
     }
 
     // ======================================================================
@@ -182,8 +207,8 @@ namespace hpp {
       // Add object in local list
       collisionObstacles_.push_back (object);
       // Add obstacle to path validation method
-      if (pathValidation_) {
-	pathValidation_->addObstacle (object);
+      if (pathValidations_) {
+	pathValidations_->addObstacle (object);
       }
       if (configValidations_) {
 	configValidations_->addObstacle (object);
@@ -195,8 +220,8 @@ namespace hpp {
     void Problem::removeObstacleFromJoint (const JointPtr_t& joint,
 					   const CollisionObjectConstPtr_t& obstacle)
     {
-      if (pathValidation_) {
-	pathValidation_->removeObstacleFromJoint (joint, obstacle);
+      if (pathValidations_) {
+	pathValidations_->removeObstacleFromJoint (joint, obstacle);
       }
       if (configValidations_) {
 	configValidations_->removeObstacleFromJoint (joint, obstacle);
@@ -210,8 +235,8 @@ namespace hpp {
       RelativeMotion::fromConstraint (matrix, robot_, constraints_);
       hppDout (info, "RelativeMotion matrix:\n" << matrix);
 
-      if (pathValidation_) {
-	pathValidation_->filterCollisionPairs (matrix);
+      if (pathValidations_) {
+	pathValidations_->filterCollisionPairs (matrix);
       }
       if (configValidations_) {
 	configValidations_->filterCollisionPairs (matrix);
@@ -222,11 +247,22 @@ namespace hpp {
 
     void Problem::pathValidation (const PathValidationPtr_t& pathValidation)
     {
-      pathValidation_ = pathValidation;
+      if (!(pathValidations_ = HPP_DYNAMIC_PTR_CAST(PathValidations, pathValidation)))
+      {
+        clearPathValidations ();
+        pathValidations_->add ( pathValidation );
+      }
+    }
+
+    // ======================================================================
+
+    void Problem::addPathValidation (const PathValidationPtr_t& pathValidation)
+    {
+      pathValidations_->add ( pathValidation );
       // Insert obstacles in path validation object
       for (ObjectStdVector_t::const_iterator it =  collisionObstacles_.begin ();
-	   it != collisionObstacles_.end (); ++it) {
-	pathValidation_->addObstacle (*it);
+	        it != collisionObstacles_.end (); ++it) {
+	      pathValidation->addObstacle (*it);
       }
     }
 
@@ -235,6 +271,11 @@ namespace hpp {
     void Problem::addConfigValidation (const ConfigValidationPtr_t& configValidation)
     {
       configValidations_->add ( configValidation );
+      // Insert obstacles in config validation object
+      for (ObjectStdVector_t::const_iterator it =  collisionObstacles_.begin ();
+	        it != collisionObstacles_.end (); ++it) {
+	      configValidation->addObstacle (*it);
+      }
     }
 
     // ======================================================================

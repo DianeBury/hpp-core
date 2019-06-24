@@ -53,6 +53,8 @@ namespace hpp {
       SteeringMethodBuilder_t;
     typedef std::vector<std::pair < std::string, CollisionObjectPtr_t > > AffordanceObjects_t;
     typedef vector3_t AffordanceConfig_t;
+    typedef std::vector <std::string> PathValidationTypes_t;
+    typedef std::vector <value_type> PathValidationTolerances_t;
 
     /// Set and solve a path planning problem
     ///
@@ -173,17 +175,39 @@ namespace hpp {
       /// \note each intermediate optimization output is stored in this object.
       void optimizePath (PathVectorPtr_t path);
 
-      /// Set path validation method
+      /// Set a path validation method
       /// \param type name of new path validation method
       /// \param tolerance acceptable penetration for path validation
+      /// Potential path validation methods already in use are overwritten by this
       /// Path validation methods are used to validate edges in path planning
       /// path optimization methods.
       virtual void pathValidationType (const std::string& type,
                                        const value_type& tolerance);
-      const std::string& pathValidationType (value_type& tolerance) const {
-        tolerance = pathValidationTolerance_;
-        return pathValidationType_;
+
+      /// Set several path validation methods
+      /// \param types vector of the names of the new path validation methods
+      /// \param tolerances vector of the acceptable penetration for the path validations
+      /// Path validation methods are used to validate edges in path planning
+      /// path optimization methods.
+      virtual void pathValidationTypes (const PathValidationTypes_t &types,
+                                        const PathValidationTolerances_t &tolerance);
+
+      const PathValidationTypes_t pathValidationTypes 
+            (PathValidationTolerances_t &tolerances) {
+        tolerances = pathValidationTolerances_;
+        return pathValidationTypes_;
       }
+
+      /// Add a path validation method
+      /// \param type name of new path validation method
+      /// \param tolerance acceptable penetration for path validation
+      /// Path validation methods are used to validate edges in path planning
+      /// path optimizatisetPathValidationFactorieson methods.
+      virtual void addPathValidation (const std::string& type,
+					    const value_type& tolerance);
+
+      // Clear the vector of path validations
+      void clearPathValidations ();
 
       /// Set path projector method
       /// \param type name of new path validation method
@@ -639,9 +663,9 @@ namespace hpp {
       PathOptimizerTypes_t pathOptimizerTypes_;
       PathOptimizers_t pathOptimizers_;
       /// Path validation method
-      std::string pathValidationType_;
-      /// Tolerance of path validation
-      value_type pathValidationTolerance_;
+      PathValidationTypes_t pathValidationTypes_;
+      /// Tolerances of path validations
+      PathValidationTolerances_t pathValidationTolerances_;
       // Config validation methods
       ConfigValidationTypes_t configValidationTypes_;
       /// Store obstacles until call to solve.

@@ -27,6 +27,8 @@
 #include <hpp/core/continuous-validation/initializer.hh>
 #include <hpp/core/continuous-validation/solid-solid-collision.hh>
 
+#include <pinocchio/multibody/data.hpp>
+
 #include <iterator>
 namespace hpp {
   namespace core {
@@ -47,10 +49,24 @@ namespace hpp {
     {
       interval.first = -std::numeric_limits <value_type>::infinity ();
       interval.second = std::numeric_limits <value_type>::infinity ();
+
+      robot_->currentConfiguration (config);
+      robot_->computeFramesForwardKinematics ();
+      robot_->updateGeometryPlacements ();
+
       hpp::pinocchio::DeviceSync robot (robot_);
       robot.currentConfiguration (config);
       robot.computeForwardKinematics();
+      // robot.computeFramesForwardKinematics();
       robot.updateGeometryPlacements();
+
+      // Transform3f tf = robot.d ().data_->oMf [4];
+      // std::cout << "continuous-val : " << tf.translation ().transpose () << std::endl;
+      // std::cout << "continuous-validation : " << tf.act (cable_->localPositionStructure ()).transpose() << std::endl;
+
+      // tf = robot_->data ().oMf [4];
+      // std::cout << "continuous-val, robot_ : " << tf.translation ().transpose () << std::endl;
+
       BodyPairCollisions_t::iterator smallestInterval = bodyPairCollisions.begin();
       if (!validateIntervals<BodyPairCollisions_t, CollisionValidationReportPtr_t>
             (bodyPairCollisions, t, interval, report,

@@ -108,7 +108,7 @@ namespace hpp {
     protected:
       typedef continuousValidation::BodyPairCollisions_t BodyPairCollisions_t;
 
-      static void setPath(BodyPairCollisions_t& bodyPairCollisions,
+      virtual void setPath(BodyPairCollisions_t& bodyPairCollisions,
           const PathPtr_t &path, bool reverse);
 
       /// Constructor
@@ -149,13 +149,6 @@ namespace hpp {
       value_type stepSize_;
       // Initializer as a delegate
       continuousValidation::InitializerPtr_t initializer_;
-    private:
-      // Weak pointer to itself
-      ContinuousValidationWkPtr_t weak_;
-
-      virtual bool validateStraightPath (BodyPairCollisions_t& bodyPairCollisions,
-          const PathPtr_t& path, bool reverse, PathPtr_t& validPart,
-          PathValidationReportPtr_t& report) = 0;
 
       /// Validate a set of intervals for a given parameter along a path
       ///
@@ -207,6 +200,15 @@ namespace hpp {
         }
         return true;
       }
+
+    private:
+      // Weak pointer to itself
+      ContinuousValidationWkPtr_t weak_;
+
+      virtual bool validateStraightPath (BodyPairCollisions_t& bodyPairCollisions,
+          const PathPtr_t& path, bool reverse, PathPtr_t& validPart,
+          PathValidationReportPtr_t& report) = 0;
+
       friend class continuousValidation::Initializer;
 
     }; // class ContinuousValidation

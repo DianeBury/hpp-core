@@ -142,6 +142,22 @@ SET(${PROJECT_NAME}_HEADERS
   include/hpp/core/time-parameterization.hh
   include/hpp/core/time-parameterization/piecewise-polynomial.hh
   include/hpp/core/time-parameterization/polynomial.hh
+  include/hpp/core/continuous-validation/benchmarks/basic/continuous-validation.hh
+  include/hpp/core/continuous-validation/benchmarks/basic/body-pair-collision.hh
+  include/hpp/core/continuous-validation/benchmarks/basic/solid-solid-collision.hh
+  include/hpp/core/continuous-validation/benchmarks/basic/dichotomy.hh
+  include/hpp/core/continuous-validation/benchmarks/memory/continuous-validation.hh
+  include/hpp/core/continuous-validation/benchmarks/memory/body-pair-collision.hh
+  include/hpp/core/continuous-validation/benchmarks/memory/solid-solid-collision.hh
+  include/hpp/core/continuous-validation/benchmarks/memory/dichotomy.hh
+  include/hpp/core/continuous-validation/benchmarks/sorting/continuous-validation.hh
+  include/hpp/core/continuous-validation/benchmarks/sorting/body-pair-collision.hh
+  include/hpp/core/continuous-validation/benchmarks/sorting/solid-solid-collision.hh
+  include/hpp/core/continuous-validation/benchmarks/sorting/dichotomy.hh
+  include/hpp/core/continuous-validation/benchmarks/vmax/continuous-validation.hh
+  include/hpp/core/continuous-validation/benchmarks/vmax/body-pair-collision.hh
+  include/hpp/core/continuous-validation/benchmarks/vmax/solid-solid-collision.hh
+  include/hpp/core/continuous-validation/benchmarks/vmax/dichotomy.hh
   )
 
 SET(${PROJECT_NAME}_SOURCES
@@ -235,6 +251,22 @@ SET(${PROJECT_NAME}_SOURCES
   src/path-projector.cc
   src/problem-target/goal-configurations.cc
   src/problem-target/task-target.cc
+  src/continuous-validation/benchmarks/basic/continuous-validation.cc
+  src/continuous-validation/benchmarks/basic/body-pair-collision.cc
+  src/continuous-validation/benchmarks/basic/solid-solid-collision.cc
+  src/continuous-validation/benchmarks/basic/dichotomy.cc
+  src/continuous-validation/benchmarks/memory/continuous-validation.cc
+  src/continuous-validation/benchmarks/memory/body-pair-collision.cc
+  src/continuous-validation/benchmarks/memory/solid-solid-collision.cc
+  src/continuous-validation/benchmarks/memory/dichotomy.cc
+  src/continuous-validation/benchmarks/sorting/continuous-validation.cc
+  src/continuous-validation/benchmarks/sorting/body-pair-collision.cc
+  src/continuous-validation/benchmarks/sorting/solid-solid-collision.cc
+  src/continuous-validation/benchmarks/sorting/dichotomy.cc
+  src/continuous-validation/benchmarks/vmax/continuous-validation.cc
+  src/continuous-validation/benchmarks/vmax/body-pair-collision.cc
+  src/continuous-validation/benchmarks/vmax/solid-solid-collision.cc
+  src/continuous-validation/benchmarks/vmax/dichotomy.cc
   )
 
 ADD_LIBRARY(${PROJECT_NAME} SHARED ${${PROJECT_NAME}_SOURCES} ${${PROJECT_NAME}_HEADERS})

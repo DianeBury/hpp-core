@@ -76,6 +76,10 @@
 #include <hpp/core/collision-validation.hh>
 #include <hpp/core/joint-bound-validation.hh>
 #include <hpp/core/kinodynamic-distance.hh>
+#include <hpp/core/continuous-validation/benchmarks/basic/dichotomy.hh>
+#include <hpp/core/continuous-validation/benchmarks/memory/dichotomy.hh>
+#include <hpp/core/continuous-validation/benchmarks/sorting/dichotomy.hh>
+#include <hpp/core/continuous-validation/benchmarks/vmax/dichotomy.hh>
 
 #include "../src/path-validation/no-validation.hh"
 
@@ -219,6 +223,12 @@ namespace hpp {
       pathValidations.add ("DiscretizedCollisionAndJointBound", createDiscretizedJointBoundAndCollisionChecking);
       pathValidations.add ("Progressive", continuousValidation::Progressive::create);
       pathValidations.add ("Dichotomy",   continuousValidation::Dichotomy::create);
+
+      // Add continuous validations for the benchmarks for TRO-2021 paper
+      pathValidations.add ("DichotomyBasic", continuousValidation::basic::Dichotomy::create);
+      pathValidations.add ("DichotomyMemory", continuousValidation::memory::Dichotomy::create);
+      pathValidations.add ("DichotomySorting", continuousValidation::sorting::Dichotomy::create);
+      pathValidations.add ("DichotomyVmax", continuousValidation::vmax::Dichotomy::create);
 
       // Store config validation methods in map.
       configValidations.add ("CollisionValidation", CollisionValidation::create);

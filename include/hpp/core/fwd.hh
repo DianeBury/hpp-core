@@ -244,7 +244,65 @@ namespace hpp {
       typedef std::vector <IntervalValidationPtr_t> IntervalValidations_t;
       HPP_PREDEF_CLASS (SolidSolidCollision);
       typedef shared_ptr <SolidSolidCollision> SolidSolidCollisionPtr_t;
+
+      namespace basic {
+        HPP_PREDEF_CLASS (Dichotomy);
+        typedef shared_ptr <Dichotomy> DichotomyPtr_t;
+        HPP_PREDEF_CLASS (BodyPairCollision);
+        typedef shared_ptr <BodyPairCollision> BodyPairCollisionPtr_t;
+        HPP_PREDEF_CLASS (SolidSolidCollision);
+        typedef shared_ptr <SolidSolidCollision> SolidSolidCollisionPtr_t;
+      } // namespace basic
+
+      namespace memory {
+        HPP_PREDEF_CLASS (Dichotomy);
+        typedef shared_ptr <Dichotomy> DichotomyPtr_t;
+        HPP_PREDEF_CLASS (BodyPairCollision);
+        typedef shared_ptr <BodyPairCollision> BodyPairCollisionPtr_t;
+        HPP_PREDEF_CLASS (SolidSolidCollision);
+        typedef shared_ptr <SolidSolidCollision> SolidSolidCollisionPtr_t;
+      } // namespace memory
+
+      namespace vmax {
+        HPP_PREDEF_CLASS (Dichotomy);
+        typedef shared_ptr <Dichotomy> DichotomyPtr_t;
+        HPP_PREDEF_CLASS (BodyPairCollision);
+        typedef shared_ptr <BodyPairCollision> BodyPairCollisionPtr_t;
+        HPP_PREDEF_CLASS (SolidSolidCollision);
+        typedef shared_ptr <SolidSolidCollision> SolidSolidCollisionPtr_t;
+      } // namespace vmax
+
+      namespace sorting {
+        HPP_PREDEF_CLASS (Dichotomy);
+        typedef shared_ptr <Dichotomy> DichotomyPtr_t;
+        HPP_PREDEF_CLASS (BodyPairCollision);
+        typedef shared_ptr <BodyPairCollision> BodyPairCollisionPtr_t;
+        HPP_PREDEF_CLASS (SolidSolidCollision);
+        typedef shared_ptr <SolidSolidCollision> SolidSolidCollisionPtr_t;
+      } // namespace sorting
+
     } // namespace continuousValidation
+
+    namespace basic {
+      HPP_PREDEF_CLASS (ContinuousValidation);
+      typedef shared_ptr <ContinuousValidation>
+      ContinuousValidationPtr_t;
+    }
+    namespace memory {
+      HPP_PREDEF_CLASS (ContinuousValidation);
+      typedef shared_ptr <ContinuousValidation>
+      ContinuousValidationPtr_t;
+    }
+    namespace vmax {
+      HPP_PREDEF_CLASS (ContinuousValidation);
+      typedef shared_ptr <ContinuousValidation>
+      ContinuousValidationPtr_t;
+    }
+    namespace sorting {
+      HPP_PREDEF_CLASS (ContinuousValidation);
+      typedef shared_ptr <ContinuousValidation>
+      ContinuousValidationPtr_t;
+    }
 
 
     namespace distance {

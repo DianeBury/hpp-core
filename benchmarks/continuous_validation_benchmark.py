@@ -1050,6 +1050,11 @@ def shootValidConfigArmNeutral(Nmax):
         q[robot.rankInConfiguration['tiago/arm_6_joint']] = 1.3
         q[robot.rankInConfiguration['tiago/arm_7_joint']] = 0.00
         q[robot.rankInConfiguration['table/root_joint']:] = [0,0.3,0,0,0,1,0]
+        q[robot.rankInConfiguration['tiago/hand_index_joint']] = q0[robot.rankInConfiguration['tiago/hand_index_joint']]
+        q[robot.rankInConfiguration['tiago/hand_mrl_joint']] = q0[robot.rankInConfiguration['tiago/hand_mrl_joint']]
+        q[robot.rankInConfiguration['tiago/hand_thumb_joint']] = q0[robot.rankInConfiguration['tiago/hand_thumb_joint']]
+        q[robot.rankInConfiguration['tiago/head_1_joint']] = q0[robot.rankInConfiguration['tiago/head_1_joint']]
+        q[robot.rankInConfiguration['tiago/head_2_joint']] = q0[robot.rankInConfiguration['tiago/head_2_joint']]
         if robot.configIsValid(q):
             return True, q
     return False, None
@@ -1064,7 +1069,6 @@ def validatePath(q1,q2):
     elapsed_time = end - start
     return res, elapsed_time
 
-
 # Test the given paths for all the continuous validation methods
 # (basic, with memory, with vmax, with sorting, complete)
 # and print and return the computation time
@@ -1073,30 +1077,41 @@ def testPath(q1,q2):
     times = {}
     # Test BASIC
     ps.selectPathValidation("DichotomyBasic", 0)
+    graph.initialize()
     res, time = validatePath(q1,q2)
     times['BASIC'] = time
     valid['BASIC'] = res
     # Test MEMORY
     ps.selectPathValidation("DichotomyMemory", 0)
+    graph.initialize()
     res, time = validatePath(q1,q2)
     times['MEMORY'] = time
     valid['MEMORY'] = res
     # Test VMAX
     ps.selectPathValidation("DichotomyVmax", 0)
+    graph.initialize()
     res, time = validatePath(q1,q2)
     times['VMAX'] = time
     valid['VMAX'] = res
     # Test SORTING
     ps.selectPathValidation("DichotomySorting", 0)
+    graph.initialize()
     res, time = validatePath(q1,q2)
     times['SORTING'] = time
     valid['SORTING'] = res
     # Test COMPLETE
     ps.selectPathValidation("Dichotomy", 0)
+    graph.initialize()
     res, time = validatePath(q1,q2)
     times['COMPLETE'] = time
     valid['COMPLETE'] = res
-    return times
+    # Test GRAPH-DICHOTOMY
+    ps.selectPathValidation("Graph-Dichotomy", 0)
+    graph.initialize()
+    res, time = validatePath(q1,q2)
+    print("Graph-Dichotomy:", res, " time : ", time)
+    print(valid)
+    return valid, times
 
 def add_new_times(all_times, new_time):
     for key in all_times:
@@ -1109,8 +1124,10 @@ def launch_benchmark(Ntests = 1):
         # Generate 2 random configurations
         res, q1 = shootValidConfigArmNeutral(200)
         if res:
+            print("q=", q1)
             # Generate and test the straight path between the 2 configs
-            add_new_times(all_times, testPath(q0, q1))
+            valid, times = testPath(q0, q1)
+            add_new_times(all_times, times)
             # Print elapsed time in logs
             # print("Test", i, "- elapsed time:", elapsed_time)
     return all_times

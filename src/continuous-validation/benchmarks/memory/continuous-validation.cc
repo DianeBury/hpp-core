@@ -158,6 +158,7 @@ namespace hpp {
       bool ContinuousValidation::validate(const PathPtr_t &path, bool reverse, PathPtr_t &validPart,
                                                 PathValidationReportPtr_t &report)
       {
+        hppDout(benchmark, "Memory new path");
         if (PathVectorPtr_t pv = HPP_DYNAMIC_PTR_CAST(PathVector, path))
         {
           PathVectorPtr_t validPathVector = PathVector::create(path->outputSize(), path->outputDerivativeSize());

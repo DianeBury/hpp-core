@@ -17,6 +17,7 @@
 
 #define HPP_DEBUG 1
 
+#include <hpp/util/debug.hh>
 #include <hpp/core/continuous-validation/body-pair-collision.hh>
 
 #include <limits>
@@ -148,6 +149,7 @@ namespace hpp {
         ValidationReportPtr_t& report,
         const pinocchio::DeviceData& data)
       {
+        hppDout(benchmark, "computeDistanceLowerBound Complete");
         using std::numeric_limits;
         distanceLowerBound = numeric_limits <value_type>::infinity ();
         const CollisionPairs_t& prs (pairs());

@@ -5,6 +5,7 @@ from hpp.corbaserver.manipulation import Robot, loadServerPlugin, createContext,
 from hpp.gepetto.manipulation import ViewerFactory
 from hpp_idl.hpp import Error as HppError
 import sys, argparse, numpy as np, time, rospy
+
 try:
     import tqdm
     def progressbar_iterable(iterable, *args, **kwargs):
@@ -102,9 +103,6 @@ client.manipulation.problem.selectProblem (args.context)
 
 robot = Robot("robot", "tiago", rootJointType="planar", client=client)
 crobot = robot.hppcorba.problem.getProblem().robot()
-
-from tiago_fov import TiagoFOV, TiagoFOVGuiCallback
-from hpp import Transform
 
 qneutral = crobot.neutralConfiguration()
 qneutral[robot.rankInConfiguration['tiago/hand_thumb_abd_joint']] = 1.5707
@@ -290,6 +288,8 @@ import scipy as sp
 from scipy import stats
 import matplotlib.pyplot as plt
 import pandas as pd
+from util import pretty_dict_string, find_free_filename, plot_box, plot_hist, get_stats
+
 
 def shootValidConfigArmNeutral(Nmax=200, q_ref=q0):
     for i in range(Nmax):
@@ -434,44 +434,6 @@ def launch_tests(Ntests = 1, case='FullBody'):
     bar.finish()
     return configs, valid_paths, all_times
 
-def get_stats(all_times):
-    stats = {}
-    for key in all_times:
-        stats[key] = {}
-        stats[key]['min'] =  min(all_times[key])
-        stats[key]['max'] =  max(all_times[key])
-        stats[key]['mean'] =  sum(all_times[key]) / len(all_times[key])
-    return stats
-
-def plot_hist(all_times, key):
-    print(key)
-    data = all_times[key]
-    plt.hist(data, bins=100)
-    plt.show()
-    
-
-def plot_box(all_times):
-    cases = ['BASIC', 'SORTING', 'VMAX', 'MEMORY', 'COMPLETE']
-    data = [all_times[key] for key in cases]
-    fig, ax = plt.subplots()
-    ax.set_title('Continuous validation benchmark')
-    ax.boxplot(data)
-    plt.yscale('log')
-    plt.xticks(range(1,6), cases)
-    plt.show()
-
-def pretty_dict_string(dico, indent=0, output=None):
-    pretty_string = ""
-    for key, value in dico.items():
-        if type(value) is dict:
-            pretty_string += '    ' * indent + str(key) + '\n'
-            pretty_string += pretty_dict_string(value, indent+1)
-        else:
-            pretty_string +=  '    ' * indent + str(key) + ' : ' + str(dico[key]) + '\n'
-        if indent == 0:
-            pretty_string += '\n'
-    return pretty_string
-
 def write_raw_data(filename, times):
     cases = ['BASIC', 'SORTING', 'VMAX', 'MEMORY', 'COMPLETE']
     with open(filename, 'w') as csvfile:
@@ -493,8 +455,9 @@ def launch_all_tests(Ntests=1, write=True):
     results['ArmNeutral'] = get_stats(times)
     if write:
         filename0 = './data/benchmark_raw_data_armneutral.csv'
-        print("Writing file:", filename0)
-        write_raw_data(find_free_filename(filename0, '.csv'), times)
+        filename = find_free_filename(filename0, '.csv')
+        print("Writing file:", filename)
+        write_raw_data(filename, times)
     print()
     # Fixed Base test
     configs, valid_paths, times = launch_tests(Ntests, case='FixedBase')
@@ -502,8 +465,9 @@ def launch_all_tests(Ntests=1, write=True):
     results['FixedBase'] = get_stats(times)
     if write:
         filename0 = './data/benchmark_raw_data_fixedbase.csv'
-        print("Writing file:", filename0)
-        write_raw_data(find_free_filename(filename0, '.csv'), times)
+        filename = find_free_filename(filename0, '.csv')
+        print("Writing file:", filename)
+        write_raw_data(filename, times)
     print()
     # FullBody test
     configs, valid_paths, times = launch_tests(Ntests, case='FullBody')
@@ -511,27 +475,12 @@ def launch_all_tests(Ntests=1, write=True):
     results['FullBody'] = get_stats(times)
     if write:
         filename0 = './data/benchmark_raw_data_fullbody.csv'
-        print("Writing file:", filename0)
-        write_raw_data(find_free_filename(filename0, '.csv'), times)
+        filename = find_free_filename(filename0, '.csv')
+        print("Writing file:", filename)
+        write_raw_data(filename, times)
     print()
     return results
     #pretty_print_dict(results)
-
-def find_free_filename(filename0, extension):
-    i = 0
-    file_ok = False
-    while not file_ok:
-        if i == 0:
-            filename = filename0
-        else:
-            name = filename0.split(extension)[0]
-            filename = name + str(i) + extension
-        myfile = Path(filename)
-        if myfile.is_file():
-            i += 1
-        else:
-            file_ok = True
-    return filename
 
 def read_data(filename):
     time_data = {'BASIC':[], 'MEMORY':[], 'VMAX':[], 'SORTING':[], 'COMPLETE':[]}

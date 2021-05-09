@@ -16,6 +16,8 @@
 // hpp-core  If not, see
 // <http://www.gnu.org/licenses/>.
 
+#define HPP_DEBUG 1
+
 #include <hpp/core/continuous-validation/benchmarks/vmax/continuous-validation.hh>
 
 #include <limits>

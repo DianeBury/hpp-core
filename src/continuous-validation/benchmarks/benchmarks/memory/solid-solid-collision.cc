@@ -17,7 +17,7 @@
 // <http://www.gnu.org/licenses/>.
 
 #include <iostream>
-#include <hpp/core/continuous-validation/benchmarks/basic/solid-solid-collision.hh>
+#include <hpp/core/continuous-validation/benchmarks/memory/solid-solid-collision.hh>
 
 #include <pinocchio/multibody/model.hpp>
 
@@ -34,14 +34,13 @@
 namespace hpp {
   namespace core {
     namespace continuousValidation {
-      namespace basic {
-        typedef shared_ptr <basic::SolidSolidCollision> SolidSolidCollisionPtr_t;
+      namespace memory {
+        typedef shared_ptr <memory::SolidSolidCollision> SolidSolidCollisionPtr_t;
 
         SolidSolidCollisionPtr_t SolidSolidCollision::create(const JointPtr_t& joint_a,
                   const ConstObjectStdVector_t& objects_b,
                   value_type tolerance)
         {
-          std::cout << "SolidSolidCollision basic" << std::endl;
           SolidSolidCollision* ptr
             (new SolidSolidCollision(joint_a, objects_b, tolerance));
           SolidSolidCollisionPtr_t shPtr(ptr);
@@ -53,7 +52,6 @@ namespace hpp {
                   const JointPtr_t& joint_b,
                   value_type tolerance)
         {
-          std::cout << "SolidSolidCollision basic" << std::endl;
           SolidSolidCollision* ptr = new SolidSolidCollision
             (joint_a, joint_b, tolerance);
           SolidSolidCollisionPtr_t shPtr (ptr);
@@ -296,7 +294,7 @@ namespace hpp {
           weak_ = weak;
         }
 
-      } // namespace basic
+      } // namespace memory
     } // namespace continuousValidation
   } // namespace core
 } // namespace hpp

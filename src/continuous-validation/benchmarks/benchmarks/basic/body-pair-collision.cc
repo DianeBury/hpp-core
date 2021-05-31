@@ -99,7 +99,6 @@ namespace hpp {
 
         void BodyPairCollision::setupPath()
         {
-          std::cout << "hello, BodyPairCollision::setupPath()" << std::endl;
           if (HPP_DYNAMIC_PTR_CAST(StraightPath, path_)) refine_ = false;
           Vb_ = vector_t (path_->outputDerivativeSize());
           value_type t0 = path_->timeRange ().first;

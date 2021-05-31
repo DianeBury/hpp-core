@@ -19,7 +19,7 @@
 
 #include <hpp/util/debug.hh>
 #include <iostream>
-#include <hpp/core/continuous-validation/benchmarks/basic/body-pair-collision.hh>
+#include <hpp/core/continuous-validation/benchmarks/sorting/body-pair-collision.hh>
 
 #include <limits>
 
@@ -35,7 +35,7 @@
 namespace hpp {
   namespace core {
     namespace continuousValidation {
-      namespace basic {
+      namespace sorting {
         using ::pinocchio::toFclTransform3f;
 
         bool BodyPairCollision::validateConfiguration (const value_type& t, interval_t& interval,
@@ -99,7 +99,6 @@ namespace hpp {
 
         void BodyPairCollision::setupPath()
         {
-          std::cout << "hello, BodyPairCollision::setupPath()" << std::endl;
           if (HPP_DYNAMIC_PTR_CAST(StraightPath, path_)) refine_ = false;
           Vb_ = vector_t (path_->outputDerivativeSize());
           value_type t0 = path_->timeRange ().first;
@@ -152,7 +151,7 @@ namespace hpp {
           ValidationReportPtr_t& report,
           const pinocchio::DeviceData& data)
         {
-          hppDout(benchmark, "computeDistanceLowerBound Basic");
+          hppDout(benchmark, "computeDistanceLowerBound Sorting");
           using std::numeric_limits;
           distanceLowerBound = numeric_limits <value_type>::infinity ();
           const CollisionPairs_t& prs (pairs());
@@ -174,7 +173,7 @@ namespace hpp {
           }
           return true;
         }
-      } // namespace basic
+      } // namespace sorting
     } // namespace continuousValidation
   } // namespace core
 } // namespace hpp

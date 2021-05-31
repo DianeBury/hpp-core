@@ -16,6 +16,8 @@
 // hpp-core  If not, see
 // <http://www.gnu.org/licenses/>.
 
+#define HPP_DEBUG 1
+
 #include <hpp/core/continuous-validation/benchmarks/vmax/dichotomy.hh>
 
 #include <iterator>
@@ -32,9 +34,13 @@ namespace hpp {
   namespace core {
     namespace continuousValidation {
       namespace vmax {
+        using hpp::core::basic::ContinuousValidationBasic;
+        
         DichotomyPtr_t
         Dichotomy::create (const DevicePtr_t& robot, const value_type& tolerance)
         {
+          std::cout << "Dichotomy Vmax" << std::endl;
+          hppDout(benchmark, "Dichotomy Vmax");
           Dichotomy* ptr = new Dichotomy (robot, tolerance);
           DichotomyPtr_t shPtr (ptr);
           ptr->init(shPtr);
@@ -120,7 +126,7 @@ namespace hpp {
         }
 
         Dichotomy::Dichotomy (const DevicePtr_t& robot, const value_type& tolerance):
-          ContinuousValidation (robot, tolerance), weak_()
+          ContinuousValidationBasic (robot, tolerance), weak_()
         {
           // Tolerance should be equal to 0, otherwise end of valid
           // sub-path might be in collision.

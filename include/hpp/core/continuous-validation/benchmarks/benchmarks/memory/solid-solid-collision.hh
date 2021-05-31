@@ -16,15 +16,15 @@
 // hpp-core  If not, see
 // <http://www.gnu.org/licenses/>.
 
-#ifndef HPP_CORE_CONTINUOUS_VALIDATION_BASIC_SOLID_SOLID_COLLISION_HH
-# define HPP_CORE_CONTINUOUS_VALIDATION_BASIC_SOLID_SOLID_COLLISION_HH
+#ifndef HPP_CORE_CONTINUOUS_VALIDATION_MEMORY_SOLID_SOLID_COLLISION_HH
+# define HPP_CORE_CONTINUOUS_VALIDATION_MEMORY_SOLID_SOLID_COLLISION_HH
 
-#include <hpp/core/continuous-validation/benchmarks/basic/body-pair-collision.hh>
+#include <hpp/core/continuous-validation/benchmarks/memory/body-pair-collision.hh>
 
 namespace hpp {
   namespace core {
     namespace continuousValidation {
-      namespace basic {
+      namespace memory {
         struct CoefficientVelocity
         {
           CoefficientVelocity () : value_ (0)
@@ -45,7 +45,7 @@ namespace hpp {
         ///
         /// See <a href="continuous-validation.pdf"> this document </a>
         /// for details.
-        class HPP_CORE_DLLAPI SolidSolidCollision : public hpp::core::continuousValidation::basic::BodyPairCollision
+        class HPP_CORE_DLLAPI SolidSolidCollision : public BodyPairCollision
         {
         public:
           /// Create instance and return shared pointer
@@ -156,7 +156,7 @@ namespace hpp {
           shared_ptr<Model> m_;
           SolidSolidCollisionWkPtr_t weak_;
         }; // class SolidSolidCollision
-      } // namespace basic
+      } // namespace memory
     } // namespace continuousValidation
   } // namespace core
 } // namespace hpp

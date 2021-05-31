@@ -16,6 +16,8 @@
 // hpp-core  If not, see
 // <http://www.gnu.org/licenses/>.
 
+#define HPP_DEBUG 1
+
 #include <hpp/core/continuous-validation/benchmarks/basic/dichotomy.hh>
 
 #include <iterator>
@@ -35,10 +37,13 @@ namespace hpp {
         DichotomyPtr_t
         Dichotomy::create (const DevicePtr_t& robot, const value_type& tolerance)
         {
+          std::cout << "Dichotomy Basic" << std::endl;
+          hppDout(benchmark, "Dichotomy Basic");
           Dichotomy* ptr = new Dichotomy (robot, tolerance);
           DichotomyPtr_t shPtr (ptr);
           ptr->init(shPtr);
           ptr->initialize();
+          std::cout << "--- Dichotomy Basic done" << std::endl;
           return shPtr;
         }
 
@@ -115,12 +120,12 @@ namespace hpp {
 
         void Dichotomy::init(const DichotomyWkPtr_t weak)
         {
-          ContinuousValidation::init (weak);
+          ContinuousValidationBasic::init (weak);
           weak_ = weak;
         }
 
         Dichotomy::Dichotomy (const DevicePtr_t& robot, const value_type& tolerance):
-          ContinuousValidation (robot, tolerance), weak_()
+          ContinuousValidationBasic (robot, tolerance), weak_()
         {
           // Tolerance should be equal to 0, otherwise end of valid
           // sub-path might be in collision.

@@ -210,7 +210,7 @@ namespace hpp {
       }
       /// Iteratively call method doExecute of delegate classes Initialize
       /// \sa ContinuousValidation::add, ContinuousValidation::Initialize.
-      void initialize();
+      virtual void initialize();
 
       virtual ~ContinuousValidation ();
     protected:

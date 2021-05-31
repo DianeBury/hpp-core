@@ -16,6 +16,8 @@
 // hpp-core  If not, see
 // <http://www.gnu.org/licenses/>.
 
+#define HPP_DEBUG 1
+
 #include <hpp/core/continuous-validation/benchmarks/sorting/dichotomy.hh>
 
 #include <iterator>
@@ -35,6 +37,8 @@ namespace hpp {
         DichotomyPtr_t
         Dichotomy::create (const DevicePtr_t& robot, const value_type& tolerance)
         {
+          std::cout << "Dichotomy Sorting" << std::endl;
+          hppDout(benchmark, "Dichotomy Sorting");
           Dichotomy* ptr = new Dichotomy (robot, tolerance);
           DichotomyPtr_t shPtr (ptr);
           ptr->init(shPtr);

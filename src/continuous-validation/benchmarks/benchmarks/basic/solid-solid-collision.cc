@@ -41,7 +41,6 @@ namespace hpp {
                   const ConstObjectStdVector_t& objects_b,
                   value_type tolerance)
         {
-          std::cout << "SolidSolidCollision basic" << std::endl;
           SolidSolidCollision* ptr
             (new SolidSolidCollision(joint_a, objects_b, tolerance));
           SolidSolidCollisionPtr_t shPtr(ptr);
@@ -53,7 +52,6 @@ namespace hpp {
                   const JointPtr_t& joint_b,
                   value_type tolerance)
         {
-          std::cout << "SolidSolidCollision basic" << std::endl;
           SolidSolidCollision* ptr = new SolidSolidCollision
             (joint_a, joint_b, tolerance);
           SolidSolidCollisionPtr_t shPtr (ptr);

@@ -16,9 +16,7 @@
 // hpp-core  If not, see
 // <http://www.gnu.org/licenses/>.
 
-#define HPP_DEBUG 1
-
-#include <hpp/core/continuous-validation/benchmarks/memory/dichotomy.hh>
+#include <hpp/core/continuous-validation/benchmarks/basic/dichotomy.hh>
 
 #include <iterator>
 
@@ -33,14 +31,12 @@
 namespace hpp {
   namespace core {
     namespace continuousValidation {
-      namespace memory {
-        using hpp::core::basic::ContinuousValidationBasic;
-
+      namespace basic {
         DichotomyPtr_t
         Dichotomy::create (const DevicePtr_t& robot, const value_type& tolerance)
         {
-          std::cout << "Dichotomy Memory" << std::endl;
-          hppDout(benchmark, "Dichotomy Memory");
+        std::cout << "Dichotomy Basic" << std::endl;
+        hppDout(benchmark, "Dichotomy Basic");
           Dichotomy* ptr = new Dichotomy (robot, tolerance);
           DichotomyPtr_t shPtr (ptr);
           ptr->init(shPtr);
@@ -121,7 +117,7 @@ namespace hpp {
 
         void Dichotomy::init(const DichotomyWkPtr_t weak)
         {
-          ContinuousValidation::init (weak);
+          ContinuousValidationBasic::init (weak);
           weak_ = weak;
         }
 
@@ -135,7 +131,7 @@ namespace hpp {
                     "support penetration.");
           }
         }
-      } // namespace memory
+      } // namespace basic
     } // namespace continuousValidation
   } // namespace core
 } // namespace hpp

@@ -46,6 +46,14 @@ def pretty_dict_string(dico, indent=0, output=None):
             pretty_string += '\n'
     return pretty_string
 
+def pretty_print_stats(stats):
+    if type(stats) is dict:
+        for key in dict:
+            print(key + "\n")
+            pretty_print_stats(stats[key])
+    else:
+        stats.describe()
+
 def find_free_filename(filename0, extension):
     i = 0
     file_ok = False
